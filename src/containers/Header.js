@@ -9,6 +9,7 @@ export default function Header() {
     <header
       className="py-3 px-1 d-flex align-items-center justify-content-between"
       style={{ height: "100px", borderBottom: "solid 1px blue" }}
+      id="header"
     >
       <Logo />
       <Typography

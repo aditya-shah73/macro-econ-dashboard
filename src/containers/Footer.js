@@ -3,7 +3,7 @@ import Copyright from "../components/Copyright";
 
 export default function Footer() {
   return (
-    <footer>
+    <footer id="footer">
       <Copyright />
     </footer>
   );
