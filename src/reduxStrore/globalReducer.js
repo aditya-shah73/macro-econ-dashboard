@@ -2,6 +2,7 @@ const defaultState = {
   loading: 0,
   toastData: null,
   user: null,
+  country: "USA",
 };
 
 const globalReducer = (state = defaultState, action) => {
@@ -30,6 +31,11 @@ const globalReducer = (state = defaultState, action) => {
       return {
         ...state,
         user: action.payload,
+      };
+    case "COUNTRY":
+      return {
+        ...state,
+        country: action.payload,
       };
     default:
       return state;
