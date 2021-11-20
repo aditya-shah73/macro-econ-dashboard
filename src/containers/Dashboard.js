@@ -9,9 +9,9 @@ export default function Dashboard() {
   return (
     <>
       <Header />
-      <main>
-        <SideBar />
-        <div>
+      <main className="d-flex">
+        <SideBar className="flex-grow" />
+        <div className="d-flex flex-column">
           <Timeline />
           <Canvas />
         </div>
