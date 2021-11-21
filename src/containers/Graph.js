@@ -43,7 +43,7 @@ function Graph() {
   }
 
   return (
-    <div>
+    <div style={{marginBottom: '75px'}}>
       <Chart
         chartType="LineChart"
         data={graphData}
