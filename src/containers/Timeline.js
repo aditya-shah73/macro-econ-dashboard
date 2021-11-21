@@ -57,7 +57,7 @@ function Timeline({
           max={2020}
           marks={marks}
           onChange={handleChange}
-          valueLabelDisplay="auto"
+          valueLabelDisplay="on"
         />
       </Box>
     </div>
