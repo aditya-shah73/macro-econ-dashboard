@@ -4,7 +4,7 @@ let db = new Dexie('Macroeconomics');
 
 export const loadData = async () => {
     try {
-        
+
         let res = await Axios.get("https://macro-econ-backend.herokuapp.com/load");
         console.log(res.data)
 
@@ -14,7 +14,7 @@ export const loadData = async () => {
         let storesList = {};
         for (const [key, value] of Object.entries(res.data.tables)) {
             if (key === "ANNOTATIONS") {
-                storesList[key] = "table_name, country, annotation"
+                storesList[key] = "[table_name+country], annotation"
             } else {
                 storesList[key] = "Year, India, China, USA"
             }
@@ -51,14 +51,13 @@ export const fetchData = async (table, country, yearFrom, yearTo) => {
         if (tables.length === 0) await loadData();
 
         let tableFound = false;
-        db.tables.forEach(function (table) {
-            if (table.name === table) tableFound = true;
+        db.tables.forEach(function (tab) {
+            if (tab.name == table) tableFound = true;
         });
-        if (tableFound) return [];
-
+        if (!tableFound) return response;
         const annotation_table = "ANNOTATIONS";
         let rows = await db[table].where("Year").between(yearFrom, yearTo, true, true).toArray();
-        let annotations = await db[annotation_table].where("table_name").equals(table).toArray();
+        let annotations = await db[annotation_table].where(["table_name+country"]).equals([table, country]).toArray();
 
         response.rows = rows
             .filter(function (el) {
@@ -81,6 +80,7 @@ export const fetchData = async (table, country, yearFrom, yearTo) => {
         console.log(`Execution time: ${end - start} ms`);
         return response;
     } catch (error) {
+        console.log(error)
         return response;
     }
 };
