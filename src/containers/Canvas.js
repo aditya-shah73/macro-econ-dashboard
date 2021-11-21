@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import Graph from "./Graph";
 
-export default function Canvas() {
+function Canvas({ graphs }) {
   const [height, setHeight] = useState(500);
   useEffect(() => {
     setHeight(
@@ -14,13 +15,18 @@ export default function Canvas() {
   }, []);
   return (
     <div style={{ overflowY: "scroll", height: height }}>
-      <Graph />
-      <Graph />
-      <Graph />
-      <Graph />
-      <Graph />
-      <Graph />
-      <Graph />
+      {graphs.map((graph) => (
+        <Graph key={graph} />
+      ))}
     </div>
   );
 }
+const mapStateToProps = (state) => {
+  return {
+    graphs: state.global.graphs,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Canvas);
