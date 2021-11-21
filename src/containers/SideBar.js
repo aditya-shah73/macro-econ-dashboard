@@ -8,12 +8,12 @@ import Collapse from "@mui/material/Collapse";
 import MoneyIcon from "@mui/icons-material/Money";
 import AgricultureIcon from "@mui/icons-material/AgricultureOutlined";
 import DebtIcon from "@mui/icons-material/Replay";
-import TimelineIcon from "@mui/icons-material/TimelineSharp";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Button } from "@mui/material";
 import { connect } from "react-redux";
 import Predict from "./Predict";
+import CollapsibleListItem from "./CollapsibleListItem";
 
 const categories = [
   {
@@ -104,17 +104,6 @@ const categories = [
   },
 ];
 
-function CollapsibleListItem({ data }) {
-  const { title } = data;
-  return (
-    <ListItemButton sx={{ pl: 4 }}>
-      <ListItemIcon>
-        <TimelineIcon />
-      </ListItemIcon>
-      <ListItemText primary={title} />
-    </ListItemButton>
-  );
-}
 function CollapsibleList({ data }) {
   const [open, setOpen] = React.useState(true);
 

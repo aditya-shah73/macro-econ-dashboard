@@ -5,7 +5,7 @@ export default function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      Macro Economics Dashboard
+      Macro Economics Dashboard&nbsp;
       {new Date().getFullYear()}
       {"."}
       {/* <a

@@ -5,6 +5,7 @@ const defaultState = {
   country: "USA",
   yearFrom: 1960,
   yearTo: 2020,
+  graphs: ["Current_ACCOUNT_BALANCE"],
 };
 
 const globalReducer = (state = defaultState, action) => {
@@ -48,6 +49,16 @@ const globalReducer = (state = defaultState, action) => {
       return {
         ...state,
         yearTo: action.payload,
+      };
+    case "ADD_GRAPH":
+      state.graphs.add(action.payload.index, action.payload.graph);
+      return {
+        ...state,
+      };
+    case "REMOVE_GRAPH":
+      state.graphs.remove(action.payload.index);
+      return {
+        ...state,
       };
     default:
       return state;
