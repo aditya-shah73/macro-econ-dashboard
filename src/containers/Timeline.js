@@ -48,8 +48,8 @@ function Timeline({
     setValue(newValue);
   };
   return (
-    <div id="timeline">
-      <Box sx={{ width: 1000, m: 2 }} style={{marginLeft:'180px'}}>
+    <div id="timeline" style={{display: "flex", justifyContent: "center"}}>
+      <Box sx={{ width: 1000 , m: 2 }}>
         <Slider
           getAriaLabel={() => "Year range"}
           value={value}

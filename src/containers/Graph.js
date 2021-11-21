@@ -3,6 +3,9 @@ import { connect } from "react-redux";
 import Chart from "react-google-charts";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import Axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { fetchData } from "../IndexedDB";
@@ -150,6 +153,11 @@ function Graph(props) {
     }
     console.log(graphData);
   }
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      {value}
+    </Tooltip>
+  );
 
   return (
     <div style={{ marginBottom: "15px", border: "1px solid black" }}>
@@ -159,14 +167,24 @@ function Graph(props) {
           display: "flex",
           width: "100%",
           justifyContent: "end",
+          alignItems: "center",
         }}
       >
+        {value && (
+          <OverlayTrigger
+            placement="left"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderTooltip}
+          >
+            <TextSnippetIcon />
+          </OverlayTrigger>
+        )}
         <Button
           variant="primary"
           onClick={handleShow}
-          style={{ marginTop: "10px", marginRight: "10px" }}
+          style={{ marginTop: "10px", marginRight: "10px", marginLeft: "5px" }}
         >
-          Annotate
+          Add Annotations
         </Button>
       </div>
       <div>
@@ -189,7 +207,7 @@ function Graph(props) {
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            Add annotations for {mapping[props.type].title}
+            Add/View annotations for {mapping[props.type].title}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
