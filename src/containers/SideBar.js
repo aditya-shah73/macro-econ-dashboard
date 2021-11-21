@@ -11,6 +11,9 @@ import DebtIcon from "@mui/icons-material/Replay";
 import TimelineIcon from "@mui/icons-material/TimelineSharp";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import { Button } from "@mui/material";
+import { connect } from "react-redux";
+import Predict from "./Predict";
 
 const categories = [
   {
@@ -136,18 +139,23 @@ function CollapsibleList({ data }) {
     </>
   );
 }
-export default function SideBar({ height }) {
+function SideBar({ height, isGovtRepresentative }) {
   return (
     <div
-      className="px-3"
+      className="px-3 d-flex flex-column justify-content-between"
       style={{
         height: height,
         borderRight: "solid 1px blue",
-        overflowY: "scroll",
       }}
     >
       <List
-        sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        style={{
+          width: "100%",
+          maxWidth: 360,
+          bgcolor: "background.paper",
+          height: height - 60,
+          overflowY: "scroll",
+        }}
         component="nav"
         aria-labelledby="nested-list-subheader"
         subheader={
@@ -160,6 +168,21 @@ export default function SideBar({ height }) {
           <CollapsibleList data={category} key={category.title} />
         ))}
       </List>
+      <div
+        className="d-flex justify-content-end align-items-center"
+        style={{ height: "60px" }}
+      >
+        {isGovtRepresentative && <Predict />}
+        <Button variant="contained" style={{ height: "40px" }} className="ms-2">
+          Save
+        </Button>
+      </div>
     </div>
   );
 }
+const mapStateToProps = (state) => {
+  return {
+    isGovtRepresentative: state.global.user === "representative",
+  };
+};
+export default connect(mapStateToProps, null)(SideBar);
