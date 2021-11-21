@@ -18,11 +18,13 @@ function Graph(props) {
     //Make API Call here
   };
 
-  console.log("selectedYearFrom! ", props);
+  console.log("Props: ", props);
   const baseURL = "https://macro-econ-backend.herokuapp.com/data?";
   const dataEndPoint =
     baseURL +
-    "table=GDP_GROWTH_RATE&yearFrom=" +
+    "table=" +
+    "GDP_GROWTH_RATE" +
+    "&yearFrom=" +
     props.selectedYearFrom +
     "&yearTo=" +
     props.selectedYearTo +
@@ -42,7 +44,7 @@ function Graph(props) {
 
   const graphData = [];
   if (!loading) {
-    graphData[0] = ["x", "GDP"];
+    graphData[0] = ["x", "y"];
     for (var i = 0; i < data.length; i++) {
       graphData[i + 1] = [data[i][0], data[i][1]];
     }
