@@ -4,11 +4,12 @@ let db = new Dexie('Macroeconomics');
 
 export const loadData = async () => {
     try {
-        await db.delete();
-        db = new Dexie('Macroeconomics');
-
+        
         let res = await Axios.get("https://macro-econ-backend.herokuapp.com/load");
         console.log(res.data)
+
+        await db.delete();
+        db = new Dexie('Macroeconomics');
 
         let storesList = {};
         for (const [key, value] of Object.entries(res.data.tables)) {
@@ -32,6 +33,7 @@ export const loadData = async () => {
         }
         console.log("Load Success")
     } catch (error) {
+        console.log(error)
         console.log("Error in Load")
     }
 };
@@ -41,6 +43,7 @@ export const fetchData = async (table, country, yearFrom, yearTo) => {
         rows: [],
         annotation: ""
     };
+    await db.open();
     try {
         var start = Date.now();
         let tables = await db.tables;
