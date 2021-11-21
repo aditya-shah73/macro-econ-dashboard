@@ -4,10 +4,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { connect } from "react-redux";
-import { Paper } from "@mui/material";
 
 function CollapsibleListItem({ data, isAdded }) {
-  console.log(data.key, isAdded);
   const { title } = data;
   return (
     <ListItemButton sx={{ pl: 4 }} draggle={!isAdded}>
