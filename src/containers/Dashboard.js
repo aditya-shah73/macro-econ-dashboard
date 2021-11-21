@@ -18,7 +18,6 @@ function Dashboard({ addGraph, removeGraph, reorderGraph }) {
   }, []);
   const onDragEnd = (result) => {
     const { source, destination } = result;
-    debugger;
     // dropped outside the list
     if (!destination) {
       return;
