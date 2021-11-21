@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import Chart from "react-google-charts";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function Graph() {
+function Graph(props) {
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,8 +18,16 @@ function Graph() {
     //Make API Call here
   };
 
+  console.log("selectedYearFrom! ", props);
+  const baseURL = "https://macro-econ-backend.herokuapp.com/data?";
   const dataEndPoint =
-    "https://macro-econ-backend.herokuapp.com/data?table=GDP_GROWTH_RATE&yearFrom=1960&yearTo=2000&country=india";
+    baseURL +
+    "table=GDP_GROWTH_RATE&yearFrom=" +
+    props.selectedYearFrom +
+    "&yearTo=" +
+    props.selectedYearTo +
+    "&country=" +
+    props.selected;
   useEffect(() => {
     Axios.get(dataEndPoint, { validateStatus: false }).then((response) => {
       console.log(response.data.rows);
@@ -29,7 +38,7 @@ function Graph() {
         }
       }
     });
-  }, []);
+  }, [props]);
 
   const graphData = [];
   if (!loading) {
@@ -43,7 +52,11 @@ function Graph() {
   return (
     <div style={{ marginBottom: "15px", border: "1px solid black" }}>
       <div style={{ backgroundColor: "white" }}>
-        <Button variant="primary" onClick={handleShow} style={{ marginTop:"10px", marginLeft:"10px" }}>
+        <Button
+          variant="primary"
+          onClick={handleShow}
+          style={{ marginTop: "10px", marginLeft: "10px" }}
+        >
           Annotate
         </Button>
       </div>
@@ -85,4 +98,12 @@ function Graph() {
   );
 }
 
-export default Graph;
+const mapStateToProps = (state) => {
+  return {
+    selectedYearFrom: state.global.yearFrom,
+    selectedYearTo: state.global.yearTo,
+    selected: state.global.country,
+  };
+};
+
+export default connect(mapStateToProps, null)(Graph);
