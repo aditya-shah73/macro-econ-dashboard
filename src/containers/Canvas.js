@@ -51,7 +51,7 @@ function Canvas({ graphs, addGraph, removeGraph, reorderGraph }) {
                       provided.draggableProps.style
                     )}
                   >
-                    <Graph />
+                    <Graph type={graph} />
                   </div>
                 )}
               </Draggable>
