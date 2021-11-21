@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {fetchData} from "../IndexedDB";
+import { fetchData } from "../IndexedDB";
 
 const mapping = {
   GDP_GROWTH_RATE: {
@@ -105,41 +105,41 @@ function Graph(props) {
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [value, setValue] = useState("");
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const saveAnnotations = () => {
-    handleClose();
-    //Make API Call here
+  const handleChange = (event) => {
+    setValue(event.target.value);
+    console.log("VALUE IS: ", value);
   };
 
-  console.log("Props: ", props);
-  console.log(mapping[props.type].tableName);
-  const baseURL = "https://macro-econ-backend.herokuapp.com/data?";
-  const dataEndPoint =
-    baseURL +
-    "table=" +
-    mapping[props.type].tableName +
-    "&yearFrom=" +
-    props.selectedYearFrom +
-    "&yearTo=" +
-    props.selectedYearTo +
-    "&country=" +
-    props.selected;
+  const saveAnnotations = () => {
+    const endPoint = "https://macro-econ-backend.herokuapp.com/annotation";
+    const annotationData = {
+      table: mapping[props.type].tableName,
+      country: props.selected,
+      text: value,
+    };
+    Axios.post(endPoint, annotationData).then((response) => {
+      if (response.status === 200) {
+        handleClose();
+      } else {
+        alert("Something went wrong!!");
+      }
+    });
+  };
+
   useEffect(async () => {
-    let response = await fetchData("GDP_GROWTH_RATE", props.selected,props.selectedYearFrom, props.selectedYearTo );
-    console.log(response)
+    let response = await fetchData(
+      mapping[props.type].tableName,
+      props.selected,
+      props.selectedYearFrom,
+      props.selectedYearTo
+    );
     setData(response.rows);
     setLoading(false);
-    // Axios.get(dataEndPoint, { validateStatus: false }).then((response) => {
-    //   console.log(response.data.rows);
-    //   if (response.status === 200) {
-    //     if (response.data) {
-    //       setData(response.data.rows);
-    //       setLoading(false);
-    //     }
-    //   }
-    // });
+    setValue(response.annotation);
   }, [props]);
 
   const graphData = [];
@@ -153,7 +153,14 @@ function Graph(props) {
 
   return (
     <div style={{ marginBottom: "15px", border: "1px solid black" }}>
-      <div style={{ backgroundColor: "white", display: "flex", width: "100%", justifyContent: "end" }}>
+      <div
+        style={{
+          backgroundColor: "white",
+          display: "flex",
+          width: "100%",
+          justifyContent: "end",
+        }}
+      >
         <Button
           variant="primary"
           onClick={handleShow}
@@ -181,18 +188,22 @@ function Graph(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add annotations for {mapping[props.type].title}</Modal.Title>
+          <Modal.Title>
+            Add annotations for {mapping[props.type].title}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <input
             type="text"
             placeholder="Enter annotations for this data point"
             style={{ width: "300px" }}
+            value={value}
+            onChange={handleChange}
           />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={saveAnnotations}>
-            Save
+            Save/Update
           </Button>
         </Modal.Footer>
       </Modal>
