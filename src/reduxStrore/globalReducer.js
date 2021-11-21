@@ -3,6 +3,8 @@ const defaultState = {
   toastData: null,
   user: null,
   country: "USA",
+  yearFrom: 1960,
+  yearTo: 2020,
 };
 
 const globalReducer = (state = defaultState, action) => {
@@ -36,6 +38,16 @@ const globalReducer = (state = defaultState, action) => {
       return {
         ...state,
         country: action.payload,
+      };
+    case "YEARFROM":
+      return {
+        ...state,
+        yearFrom: action.payload,
+      };
+    case "YEARTO":
+      return {
+        ...state,
+        yearTo: action.payload,
       };
     default:
       return state;
