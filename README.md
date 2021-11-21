@@ -1,6 +1,6 @@
-# macro-econ-dashboard
-Macroeconomic Researcher Time Series Dashboard
-# Getting Started with Create React App
+# Macroeconomic Researcher Time Series Dashboard
+
+# Steps for unning the application
 
 In the project directory, you can run:
 
