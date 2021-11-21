@@ -49,6 +49,7 @@ function Timeline({
   };
   return (
     <div id="timeline">
+<<<<<<< HEAD
       <Box sx={{ width: 1000, m: 2 }} style={{marginLeft:'180px'}}>
         <Slider
           getAriaLabel={() => "Year range"}
@@ -57,7 +58,7 @@ function Timeline({
           max={2020}
           marks={marks}
           onChange={handleChange}
-          valueLabelDisplay="auto"
+          valueLabelDisplay="on"
         />
       </Box>
     </div>
