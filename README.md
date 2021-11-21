@@ -1,6 +1,6 @@
 # Macroeconomic Researcher Time Series Dashboard
 
-# Steps for unning the application
+# Steps for running the application
 
 In the project directory, you can run:
 
