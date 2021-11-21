@@ -37,6 +37,7 @@ console.log(newdata);
 
 function submit(e){
 e.preventDefault();
+handleClose();
 alert("Machine learning model has been called with values: " + JSON.stringify(data));
 }
   return (

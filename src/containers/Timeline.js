@@ -49,7 +49,6 @@ function Timeline({
   };
   return (
     <div id="timeline">
-<<<<<<< HEAD
       <Box sx={{ width: 1000, m: 2 }} style={{marginLeft:'180px'}}>
         <Slider
           getAriaLabel={() => "Year range"}
