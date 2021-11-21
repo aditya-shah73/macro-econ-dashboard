@@ -5,6 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import {fetchData} from "../IndexedDB";
 
 const mapping = {
   GDP_GROWTH_RATE: {
@@ -125,16 +126,20 @@ function Graph(props) {
     props.selectedYearTo +
     "&country=" +
     props.selected;
-  useEffect(() => {
-    Axios.get(dataEndPoint, { validateStatus: false }).then((response) => {
-      console.log(response.data.rows);
-      if (response.status === 200) {
-        if (response.data) {
-          setData(response.data.rows);
-          setLoading(false);
-        }
-      }
-    });
+  useEffect(async () => {
+    let response = await fetchData("GDP_GROWTH_RATE", props.selected,props.selectedYearFrom, props.selectedYearTo );
+    console.log(response)
+    setData(response.rows);
+    setLoading(false);
+    // Axios.get(dataEndPoint, { validateStatus: false }).then((response) => {
+    //   console.log(response.data.rows);
+    //   if (response.status === 200) {
+    //     if (response.data) {
+    //       setData(response.data.rows);
+    //       setLoading(false);
+    //     }
+    //   }
+    // });
   }, [props]);
 
   const graphData = [];
