@@ -23,19 +23,20 @@ function Login({ login }) {
           flexDirection: "column",
         }}
       >
+        <h2 style={{ marginLeft: "130px" }}>Login as:</h2>
         <Button
           variant="contained"
           style={{ margin: "10px", marginTop: "20px" }}
           onClick={loginAsEconResearcher}
         >
-          Login as ECON Researcher
+          Economics Researcher
         </Button>
         <Button
           variant="contained"
           style={{ margin: "10px", marginBottom: "20px" }}
           onClick={loginAsGovtRepresentative}
         >
-          Login as Govt. Representative
+          Government Representative
         </Button>
       </Paper>
     </div>
