@@ -10,7 +10,6 @@ import AgricultureIcon from "@mui/icons-material/AgricultureOutlined";
 import DebtIcon from "@mui/icons-material/Replay";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { Button } from "@mui/material";
 import { connect } from "react-redux";
 import Predict from "./Predict";
 import CollapsibleListItem from "./CollapsibleListItem";
@@ -164,13 +163,13 @@ function SideBar({ height, isGovtRepresentative }) {
         )}
       </Droppable>
       <div
-        className="d-flex justify-content-end align-items-center"
+        className="d-flex justify-content-center align-items-center"
         style={{ height: "60px" }}
       >
         {isGovtRepresentative && <Predict />}
-        <Button variant="contained" style={{ height: "40px" }} className="ms-2">
+        {/* <Button variant="contained" style={{ height: "40px" }} className="ms-2">
           Save
-        </Button>
+        </Button> */}
       </div>
     </div>
   );
