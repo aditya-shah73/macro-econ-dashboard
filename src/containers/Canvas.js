@@ -1,8 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import Graph from "./Graph";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 
-function Canvas({ graphs }) {
+const getListStyle = (isDraggingOver) => ({
+  background: isDraggingOver ? "lightblue" : "white",
+  height:'100%'
+});
+
+const getItemStyle = (isDragging, draggableStyle) => ({
+  // some basic styles to make the items look a bit nicer
+  userSelect: "none",
+  // change background colour if dragging
+  background: isDragging ? "lightgreen" : "lightgrey",
+  "&:hover": {
+    background: "lightblue",
+  },
+  ...draggableStyle,
+});
+function Canvas({ graphs, addGraph, removeGraph, reorderGraph }) {
   const [height, setHeight] = useState(500);
   useEffect(() => {
     setHeight(
@@ -13,11 +29,36 @@ function Canvas({ graphs }) {
     );
     return () => {};
   }, []);
+
   return (
     <div style={{ overflowY: "scroll", height: height }}>
-      {graphs.map((graph) => (
-        <Graph key={graph} />
-      ))}
+      <Droppable droppableId={`0`}>
+        {(provided, snapshot) => (
+          <div
+            ref={provided.innerRef}
+            style={getListStyle(snapshot.isDraggingOver)}
+            {...provided.droppableProps}
+          >
+            {graphs.map((graph, index) => (
+              <Draggable key={graph} draggableId={graph} index={index}>
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    style={getItemStyle(
+                      snapshot.isDragging,
+                      provided.draggableProps.style
+                    )}
+                  >
+                    <Graph />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+          </div>
+        )}
+      </Droppable>
     </div>
   );
 }
@@ -26,7 +67,5 @@ const mapStateToProps = (state) => {
     graphs: state.global.graphs,
   };
 };
-const mapDispatchToProps = (dispatch) => {
-  return {};
-};
-export default connect(mapStateToProps, mapDispatchToProps)(Canvas);
+
+export default connect(mapStateToProps, null)(Canvas);

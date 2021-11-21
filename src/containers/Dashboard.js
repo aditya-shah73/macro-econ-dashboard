@@ -4,8 +4,10 @@ import Footer from "./Footer";
 import SideBar from "./SideBar";
 import Timeline from "./Timeline";
 import Canvas from "./Canvas";
+import { connect } from "react-redux";
+import { DragDropContext } from "react-beautiful-dnd";
 
-export default function Dashboard() {
+function Dashboard({ addGraph, removeGraph, reorderGraph }) {
   const [sidebarHeight, setSidebarHeight] = useState(500);
   useEffect(() => {
     setSidebarHeight(
@@ -14,17 +16,57 @@ export default function Dashboard() {
         document.getElementById("footer").offsetHeight
     );
   }, []);
+  const onDragEnd = (result) => {
+    const { source, destination } = result;
+    // dropped outside the list
+    if (!destination) {
+      return;
+    }
+
+    if (destination.droppableId === "1") {
+      return;
+    }
+
+    const sInd = +source.droppableId;
+    const dInd = +destination.droppableId;
+
+    if (sInd === dInd) {
+      reorderGraph(source.index, destination.index);
+    } else {
+      addGraph(destination.index, source.index);
+    }
+  };
+
   return (
     <>
       <Header />
       <main className="d-flex">
-        <SideBar height={sidebarHeight} />
-        <div className="d-flex flex-column flex-grow-1 px-3">
-          <Timeline />
-          <Canvas />
-        </div>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <SideBar height={sidebarHeight} />
+          <div className="d-flex flex-column flex-grow-1 px-3">
+            <Timeline />
+            <Canvas />
+          </div>
+        </DragDropContext>
       </main>
       <Footer />
     </>
   );
 }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addGraph: (index, graph) => {
+      dispatch({ type: "ADD_GRAPH", payload: { index: index, graph: graph } });
+    },
+    removeGraph: (index) => {
+      dispatch({ type: "REMOVE_GRAPH", payload: { index: index } });
+    },
+    reorderGraph: (moveFrom, moveTo) => {
+      dispatch({
+        type: "REORDER_GRAPH",
+        payload: { moveFrom: moveFrom, moveTo: moveTo },
+      });
+    },
+  };
+};
+export default connect(null, mapDispatchToProps)(Dashboard);
