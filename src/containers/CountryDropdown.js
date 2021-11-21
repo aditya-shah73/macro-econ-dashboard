@@ -19,7 +19,6 @@ function CountrySelectItem({ country }) {
 }
 function CountryDropdown({ selected, updateCountry }) {
   const onCountryChange = (country) => {
-    debugger;
     if (country !== selected) {
       updateCountry(country);
     }
