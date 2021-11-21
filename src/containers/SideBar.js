@@ -14,7 +14,7 @@ import { Button } from "@mui/material";
 import { connect } from "react-redux";
 import Predict from "./Predict";
 import CollapsibleListItem from "./CollapsibleListItem";
-
+import { Droppable } from "react-beautiful-dnd";
 const categories = [
   {
     title: "Macroeconomic",
@@ -137,26 +137,32 @@ function SideBar({ height, isGovtRepresentative }) {
         borderRight: "solid 1px blue",
       }}
     >
-      <List
-        style={{
-          width: "100%",
-          maxWidth: 360,
-          bgcolor: "background.paper",
-          height: height - 60,
-          overflowY: "scroll",
-        }}
-        component="nav"
-        aria-labelledby="nested-list-subheader"
-        subheader={
-          <ListSubheader component="div" id="nested-list-subheader">
-            Graphs
-          </ListSubheader>
-        }
-      >
-        {categories?.map((category) => (
-          <CollapsibleList data={category} key={category.title} />
-        ))}
-      </List>
+      <Droppable droppableId={`1`}>
+        {(provided, snapshot) => (
+          <div ref={provided.innerRef} {...provided.droppableProps}>
+            <List
+              style={{
+                width: "100%",
+                maxWidth: 360,
+                bgcolor: "background.paper",
+                height: height - 60,
+                overflowY: "scroll",
+              }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  Graphs
+                </ListSubheader>
+              }
+            >
+              {categories?.map((category) => (
+                <CollapsibleList data={category} key={category.title} />
+              ))}
+            </List>
+          </div>
+        )}
+      </Droppable>
       <div
         className="d-flex justify-content-end align-items-center"
         style={{ height: "60px" }}
