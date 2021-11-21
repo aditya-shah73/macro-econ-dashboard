@@ -148,11 +148,11 @@ function Graph(props) {
 
   return (
     <div style={{ marginBottom: "15px", border: "1px solid black" }}>
-      <div style={{ backgroundColor: "white" }}>
+      <div style={{ backgroundColor: "white", display: "flex", width: "100%", justifyContent: "end" }}>
         <Button
           variant="primary"
           onClick={handleShow}
-          style={{ marginTop: "10px", marginLeft: "10px" }}
+          style={{ marginTop: "10px", marginRight: "10px" }}
         >
           Annotate
         </Button>
@@ -176,7 +176,7 @@ function Graph(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add annotations for:</Modal.Title>
+          <Modal.Title>Add annotations for {mapping[props.type].title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <input
