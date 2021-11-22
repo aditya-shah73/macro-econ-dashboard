@@ -12,9 +12,10 @@ export const loadData = async () => {
         db = new Dexie('Macroeconomics');
 
         let storesList = {};
+        storesList["LOCAL"] = "[table_name+country+user], annotation";
         for (const [key, value] of Object.entries(res.data.tables)) {
             if (key === "ANNOTATIONS") {
-                storesList[key] = "[table_name+country], annotation"
+                storesList[key] = "[table_name+country+user], annotation"
             } else {
                 storesList[key] = "Year, India, China, USA"
             }
@@ -26,7 +27,7 @@ export const loadData = async () => {
 
         for (const [key, value] of Object.entries(res.data.tables)) {
             db[key].bulkAdd(value).then(function (lastKey) {
-                console.log("Loaded " + key);
+                // console.log("Loaded " + key);
             }).catch(Dexie.BulkError, function (e) {
                 console.log("Failed loading " + key);
             });
@@ -38,7 +39,7 @@ export const loadData = async () => {
     }
 };
 
-export const fetchData = async (table, country, yearFrom, yearTo) => {
+export const fetchData = async (table, country, user, yearFrom, yearTo) => {
     let response = {
         rows: [],
         annotation: ""
@@ -47,7 +48,7 @@ export const fetchData = async (table, country, yearFrom, yearTo) => {
     try {
         var start = Date.now();
         let tables = await db.tables;
-        console.log(tables)
+        // console.log(tables)
         if (tables.length === 0) await loadData();
 
         let tableFound = false;
@@ -57,7 +58,7 @@ export const fetchData = async (table, country, yearFrom, yearTo) => {
         if (!tableFound) return response;
         const annotation_table = "ANNOTATIONS";
         let rows = await db[table].where("Year").between(yearFrom, yearTo, true, true).toArray();
-        let annotations = await db[annotation_table].where(["table_name+country"]).equals([table, country]).toArray();
+        let annotations = await db[annotation_table].where(["table_name+country+user"]).equals([table, country, user]).toArray();
 
         response.rows = rows
             .filter(function (el) {
@@ -84,3 +85,27 @@ export const fetchData = async (table, country, yearFrom, yearTo) => {
         return response;
     }
 };
+
+export const writeToLocal = async (table, country, user, annotation) => {
+    await db.open();
+    try {
+        await db.LOCAL.put({ "table_name": table, country, user, annotation }, ["table_name+country+user"]);
+        await db.ANNOTATIONS.put({ "table_name": table, country, user, annotation }, ["table_name+country+user"]);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const syncData = async () => {
+    await db.open();
+    try {
+        let data = await db.LOCAL.toArray();
+        await Axios.post("https://macro-econ-backend.herokuapp.com/annotation", data);
+        for (let d of data) {
+            db.LOCAL.where(["table_name+country+user"]).equals([d.table_name, d.country, d.user]).delete();
+        }
+        loadData();
+    } catch (error) {
+        console.log(error)
+    }
+}
