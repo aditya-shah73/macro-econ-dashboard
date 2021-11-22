@@ -117,20 +117,28 @@ function Graph(props) {
     console.log("VALUE IS: ", value);
   };
 
+  console.log("Props: ", props);
+
   const saveAnnotations = () => {
-    const endPoint = "https://macro-econ-backend.herokuapp.com/annotation";
     const annotationData = {
+      user: props.user,
       table: mapping[props.type].tableName,
       country: props.selected,
       text: value,
     };
-    Axios.post(endPoint, annotationData).then((response) => {
-      if (response.status === 200) {
-        handleClose();
-      } else {
-        alert("Something went wrong!!");
-      }
-    });
+    if (window.navigator.onLine) {
+      const endPoint = "https://macro-econ-backend.herokuapp.com/annotation";
+      Axios.post(endPoint, annotationData).then((response) => {
+        if (response.status === 200) {
+          handleClose();
+        } else {
+          alert("Something went wrong!!");
+        }
+      });
+    }
+    else {
+      
+    }
   };
 
   useEffect(async () => {
@@ -138,7 +146,8 @@ function Graph(props) {
       mapping[props.type].tableName,
       props.selected,
       props.selectedYearFrom,
-      props.selectedYearTo
+      props.selectedYearTo,
+      props.user
     );
     setData(response.rows);
     setLoading(false);
@@ -234,6 +243,7 @@ const mapStateToProps = (state) => {
     selectedYearFrom: state.global.yearFrom,
     selectedYearTo: state.global.yearTo,
     selected: state.global.country,
+    user: state.global.user,
   };
 };
 
