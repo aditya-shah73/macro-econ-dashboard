@@ -122,7 +122,7 @@ function Graph(props) {
   const saveAnnotations = async () => {
     const annotationData = {
       user: props.user,
-      table: mapping[props.type].tableName,
+      table_name: mapping[props.type].tableName,
       country: props.selected,
       annotation: value,
     };
