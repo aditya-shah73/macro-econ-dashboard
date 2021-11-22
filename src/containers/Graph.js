@@ -8,7 +8,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import Axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { fetchData } from "../IndexedDB";
+import { fetchData, writeToLocal } from "../IndexedDB";
 
 const mapping = {
   GDP_GROWTH_RATE: {
@@ -119,16 +119,16 @@ function Graph(props) {
 
   console.log("Props: ", props);
 
-  const saveAnnotations = () => {
+  const saveAnnotations = async () => {
     const annotationData = {
       user: props.user,
       table: mapping[props.type].tableName,
       country: props.selected,
-      text: value,
+      annotation: value,
     };
     if (window.navigator.onLine) {
       const endPoint = "https://macro-econ-backend.herokuapp.com/annotation";
-      Axios.post(endPoint, annotationData).then((response) => {
+      Axios.post(endPoint, [annotationData]).then((response) => {
         if (response.status === 200) {
           handleClose();
         } else {
@@ -137,7 +137,13 @@ function Graph(props) {
       });
     }
     else {
-      
+      await writeToLocal(
+        mapping[props.type].tableName,
+        props.selected,
+        props.user,
+        value
+      );
+      handleClose();
     }
   };
 
@@ -145,9 +151,9 @@ function Graph(props) {
     let response = await fetchData(
       mapping[props.type].tableName,
       props.selected,
+      props.user,
       props.selectedYearFrom,
-      props.selectedYearTo,
-      props.user
+      props.selectedYearTo
     );
     setData(response.rows);
     setLoading(false);
@@ -160,7 +166,7 @@ function Graph(props) {
     for (var i = 0; i < data.length; i++) {
       graphData[i + 1] = [data[i][0], data[i][1]];
     }
-    console.log(graphData);
+    // console.log(graphData);
   }
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
