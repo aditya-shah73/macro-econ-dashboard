@@ -114,10 +114,7 @@ function Graph(props) {
 
   const handleChange = (event) => {
     setValue(event.target.value);
-    console.log("VALUE IS: ", value);
   };
-
-  console.log("Props: ", props);
 
   const saveAnnotations = async () => {
     const annotationData = {
